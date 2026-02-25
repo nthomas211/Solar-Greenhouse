@@ -1,0 +1,43 @@
+.cfg-tabs { display:flex; gap:8px; align-items:center; margin-bottom:12px; }
+.cfg-tab-btn { padding:6px 12px; border:1px solid transparent; border-radius:4px; cursor:pointer; background:none; }
+.cfg-tab-btn.active { background:#f0f0f0; border-color:#ccc; }
+.cfg-grid { display:grid; grid-template-columns:1fr 120px; gap:8px 12px; align-items:center; margin-bottom:12px; }
+.cfg-section-title { font-weight:600; margin:10px 0 6px; }
+.cfg-row { display:flex; gap:8px; align-items:center; }
+.cfg-range { width:100%; }
+.cfg-button { margin-top:14px; padding:8px 14px; border-radius:6px; border:1px solid #2b6; background:#2d8; cursor:pointer; }
+.cfg-input-number { width:100%; box-sizing:border-box; padding:6px; }
+fieldset { border:1px solid #eee; padding:8px; border-radius:6px; }
+.config-section {
+    width: 80%;
+    max-width: 1200px;
+    margin: 36px auto;
+    background: #111;
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.06) !important;
+    padding: 12px;
+    border-radius: 6px !important;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.6);
+}
+
+/* keep tab text visible on dark bg */
+.cfg-tab-btn { color: inherit; }
+.cfg-tab-btn.active { background:#222; border-color: rgba(255,255,255,0.06); color:#fff; }
+
+/* fieldsets and labels */
+fieldset { background: transparent; border: 1px solid rgba(255,255,255,0.06); }
+legend, label, .cfg-section-title { color: inherit; }
+
+/* inputs on dark bg */
+input, select, textarea, .cfg-input-number {
+    background: rgba(255,255,255,0.03);
+    color: inherit;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-sizing: border-box;
+}
+
+/* range control styling hint */
+.cfg-range { accent-color: #2d8; }
+
+/* action button */
+.cfg-button { background: #2d8; color: #fff; border-color: rgba(255,255,255,0.08); }
