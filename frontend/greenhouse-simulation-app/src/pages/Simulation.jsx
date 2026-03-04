@@ -24,6 +24,42 @@ function Simulation() {
 
   const update = (key, value) => setConfig(prev => ({ ...prev, [key]: parseFloat(value) }))
 
+  const handleSimulate = async () => {
+       const payload = {
+      name: "run_1",
+      location: { lat: 41.8781, lon: -87.6298 },
+      start_date: "2026-02-10",
+      end_date: "2026-02-14",
+      parameters: {
+        A_glass: config.glassArea,
+        A_floor: config.floorArea,
+        V: config.volume,
+        tau_glass: config.glassTransmissivity,
+        U_day: config.uValueDay,
+        U_night: config.uValueNight,
+        ACH: config.ach,
+        thermal_mass_kg: config.mass,
+        A_mass: config.surfaceArea,
+        h_am: config.heatTransferCoeff,
+        fraction_solar_to_air: config.solarToAirFraction,
+        heater_max_w: config.heaterMaxPower,
+        setpoint: config.setPoint,
+        T_init: config.airTemp,
+        T_mass_init: config.massTemp,
+        T_soil_init: config.soilTemp,
+      }
+    }
+
+    const res = await fetch("http://localhost:8000/run-simulation", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    })
+
+    const data = await res.json()
+    console.log(data)
+  }
+
   const Field = ({ label, name, min, max, step }) => (
     <>
       <label>{label}</label>
@@ -114,7 +150,7 @@ function Simulation() {
         )}
 
         <div style={{display:'flex', justifyContent:'flex-end'}}>
-          <button className="cfg-button" type="button" onClick={() => console.log(config)}>Simulate</button>
+          <button className="cfg-button" type="button" onClick={handleSimulate}>Simulate</button>
         </div>
       </div>
     </div>

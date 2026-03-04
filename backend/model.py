@@ -82,7 +82,7 @@ def simulate_greenhouse(weather_df: pd.DataFrame, params: dict, dt=3600.0, subst
     heater_max_w = params.get("heater_max_w", 5000.0)
     evap_coeff = params.get("evap_coeff", 1e-8)
 
-    # Initial temperatures (some point use weather from previous iteration? idk)
+    # Initial temperatures
     T_air = float(params.get("T_init", 15.0))
     T_mass = float(params.get("T_mass_init", T_air))
     T_soil = float(params.get("T_soil_init", T_air))
