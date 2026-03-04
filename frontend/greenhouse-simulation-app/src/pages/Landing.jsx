@@ -1,59 +1,124 @@
 function Landing() {
   return (
-    <div className="min-h-screen bg-white px-6 py-12">
-      <div className="max-w-3xl mx-auto">
+    <div style={{ minHeight: "100vh", backgroundColor: "#f0fdf4", padding: "48px 24px", fontFamily: "Segoe UI, sans-serif" }}>
+      <div style={{ maxWidth: "720px", margin: "0 auto" }}>
 
         {/* Header */}
-        <div className="bg-teal-500 rounded-2xl px-8 py-10 mb-10 shadow-md">
-          <h1 className="text-4xl font-bold text-white mb-2">
+        <div style={{
+          backgroundColor: "#0d9488",
+          borderRadius: "16px",
+          padding: "40px 32px",
+          marginBottom: "32px",
+          boxShadow: "0 4px 20px rgba(13,148,136,0.3)"
+        }}>
+          <h1 style={{ fontSize: "32px", fontWeight: "800", color: "#ffffff", margin: "0 0 8px 0" }}>
             IPRO Solar Greenhouse — Simulator
           </h1>
-          <p className="text-teal-100 text-sm">
+          <p style={{ color: "#99f6e4", fontSize: "14px", margin: 0 }}>
             Powered by real-world weather data
           </p>
         </div>
 
         {/* Our Goal */}
-        <section className="mb-8 bg-teal-50 border border-teal-100 rounded-xl p-6 shadow-sm">
-          <h2 className="text-2xl font-semibold text-black mb-3">Our Goal</h2>
-          <p className="text-black leading-relaxed">
+        <div style={{
+          backgroundColor: "#ffffff",
+          border: "1px solid #99f6e4",
+          borderRadius: "14px",
+          padding: "28px",
+          marginBottom: "20px",
+          boxShadow: "0 2px 10px rgba(0,0,0,0.05)"
+        }}>
+          <h2 style={{ fontSize: "20px", fontWeight: "700", color: "#0d9488", marginTop: 0, marginBottom: "12px" }}>
+            🎯 Our Goal
+          </h2>
+          <p style={{ color: "#374151", lineHeight: "1.75", margin: 0 }}>
             Simulate and analyze the internal conditions of a solar greenhouse based
             on real-world weather data for any location and time period, helping
             greenhouse operators understand how their structure performs in their
             local climate.
           </p>
-        </section>
+        </div>
 
         {/* Site Guide */}
-        <section className="mb-8 bg-white border border-teal-200 rounded-xl p-6 shadow-sm">
-          <h2 className="text-2xl font-semibold text-black mb-3">Site Guide</h2>
-          <p className="text-black mb-3">
+        <div style={{
+          backgroundColor: "#ffffff",
+          border: "1px solid #99f6e4",
+          borderRadius: "14px",
+          padding: "28px",
+          marginBottom: "20px",
+          boxShadow: "0 2px 10px rgba(0,0,0,0.05)"
+        }}>
+          <h2 style={{ fontSize: "20px", fontWeight: "700", color: "#0d9488", marginTop: 0, marginBottom: "12px" }}>
+            🗺️ Site Guide
+          </h2>
+          <p style={{ color: "#374151", marginBottom: "14px" }}>
             Head over to the Simulator page and fill in the following:
           </p>
-          <ol className="list-decimal list-inside space-y-2 text-black">
-            <li><span className="font-medium">City</span> — Enter the name of any city (e.g. "Chicago", "London")</li>
-            <li><span className="font-medium">Start Date</span> — The date you want the simulation to begin</li>
-            <li><span className="font-medium">End Date</span> — The date you want the simulation to end</li>
-          </ol>
-          <p className="mt-3 text-black">
-            Then hit <span className="font-medium text-teal-600">Analyze Temperature</span> to generate your results.
+
+          {/* Steps */}
+          {[
+            { label: "City", desc: 'Enter the name of any city (e.g. "Chicago", "London")' },
+            { label: "Start Date", desc: "The date you want the simulation to begin" },
+            { label: "End Date", desc: "The date you want the simulation to end" },
+          ].map((step, i) => (
+            <div key={i} style={{
+              display: "flex", alignItems: "flex-start", gap: "14px",
+              marginBottom: "12px"
+            }}>
+              <div style={{
+                minWidth: "28px", height: "28px", borderRadius: "50%",
+                backgroundColor: "#0d9488", color: "#fff",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: "13px", fontWeight: "700"
+              }}>
+                {i + 1}
+              </div>
+              <p style={{ margin: 0, color: "#374151", lineHeight: "1.6" }}>
+                <strong>{step.label}</strong> — {step.desc}
+              </p>
+            </div>
+          ))}
+
+          <p style={{ color: "#374151", marginTop: "16px", marginBottom: "14px" }}>
+            Then hit{" "}
+            <span style={{ fontWeight: "700", color: "#0d9488" }}>Analyze Temperature</span>
+            {" "}to generate your results.
           </p>
-          <div className="mt-4 bg-teal-50 border border-teal-200 rounded-lg p-3 text-sm text-black">
-            💡 Tip: Use the preset buttons (Last 24h, Last 7 days, Last 30 days) to quickly fill in the date range.
+
+          {/* Tip box */}
+          <div style={{
+            backgroundColor: "#f0fdf4",
+            border: "1px solid #6ee7b7",
+            borderRadius: "10px",
+            padding: "12px 16px",
+            fontSize: "13.5px",
+            color: "#374151",
+            lineHeight: "1.6"
+          }}>
+            💡 <strong>Tip:</strong> Use the preset buttons (<em>Last 24h</em>, <em>Last 7 days</em>, <em>Last 30 days</em>) to quickly fill in the date range.
           </div>
-        </section>
+        </div>
 
         {/* Under the Hood */}
-        <section className="mb-8 bg-teal-50 border border-teal-100 rounded-xl p-6 shadow-sm">
-          <h2 className="text-2xl font-semibold text-black mb-3">Under the Hood</h2>
-          <p className="text-black leading-relaxed">
-            TODO UNDER THE HOOD CONTENT
+        <div style={{
+          backgroundColor: "#ffffff",
+          border: "1px solid #99f6e4",
+          borderRadius: "14px",
+          padding: "28px",
+          marginBottom: "20px",
+          boxShadow: "0 2px 10px rgba(0,0,0,0.05)"
+        }}>
+          <h2 style={{ fontSize: "20px", fontWeight: "700", color: "#0d9488", marginTop: 0, marginBottom: "12px" }}>
+            ⚙️ Under the Hood
+          </h2>
+          <p style={{ color: "#9ca3af", fontStyle: "italic", margin: 0 }}>
+            TODO — technical content coming soon.
           </p>
-        </section>
+        </div>
 
       </div>
     </div>
-  )
+  );
 }
 
-export default Landing
+export default Landing;
