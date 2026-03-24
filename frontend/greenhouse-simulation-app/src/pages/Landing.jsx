@@ -1,6 +1,6 @@
 function Landing() {
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#f0fdf4", padding: "32px", fontFamily: "Segoe UI, sans-serif" }}>
+    <div style={{ backgroundColor: "#f0fdf4", padding: "32px", fontFamily: "Segoe UI, sans-serif" }}>
 
       {/* Header */}
       <div style={{
