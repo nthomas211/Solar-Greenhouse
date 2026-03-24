@@ -1,6 +1,8 @@
 .idea
 *.py[cod]
 
+simulations.json
+
 # Created by https://gitignore.org
 # Python.gitignore
 

@@ -3,3 +3,5 @@ uvicorn
 pandas
 numpy
 requests
+pymongo
+tinydb
