@@ -58,6 +58,7 @@ const FIELDS = {
 }
 
 export default function Simulation() {
+  const [results, setResults] = useState(null)
   const [activeTab, setActiveTab] = useState('structure')
   const [loading, setLoading] = useState(false)
   const [config, setConfig] = useState({
@@ -115,7 +116,7 @@ export default function Simulation() {
         body: JSON.stringify(payload),
       })
       const data = await res.json()
-      console.log(data)
+      if (data.status === 'ok') setResults(data.rows)
     } catch (err) {
       console.error(err)
     } finally {
@@ -179,15 +180,13 @@ export default function Simulation() {
         {/* ── RIGHT: Output placeholder ── */}
         <div className="sim-card sim-output">
           <h2 className="sim-card-heading">Results</h2>
-          <div className="sim-output-placeholder">
-            <span className="sim-output-icon">📊</span>
-            <p className="sim-output-label">
-              Results will appear here after you run the simulation.
-            </p>
-            <p className="sim-output-hint">
-              Configure your parameters on the left, then click <strong>Run Simulation</strong>.
-            </p>
-          </div>
+          {results ? <ResultsChart rows={results} /> : (
+            <div className="sim-output-placeholder">
+              <span className="sim-output-icon">📊</span>
+              <p className="sim-output-label">Results will appear here after you run the simulation.</p>
+              <p className="sim-output-hint">Configure your parameters on the left, then click <strong>Run Simulation</strong>.</p>
+            </div>
+          )}
         </div>
 
       </div>
@@ -226,6 +225,72 @@ function FieldRow({ field, value, onChange }) {
           className="field-number"
         />
       </div>
+    </div>
+  )
+}
+
+import {
+  LineChart, Line, XAxis, YAxis, CartesianGrid,
+  Tooltip, Legend, ResponsiveContainer
+} from 'recharts'
+
+function ResultsChart({ rows }) {
+  const data = rows.map(r => ({
+    time: r.datetime.slice(11, 16), // "HH:MM"
+    date: r.datetime.slice(5, 10),  // "MM-DD"
+    Tin: +r.Tin.toFixed(2),
+    Tout: +r.Tout.toFixed(2),
+    T_mass: +r.T_mass.toFixed(2),
+    Q_heater: +r.Q_heater.toFixed(0),
+  }))
+
+  // Label every 12 hours so the axis isn't crowded
+  const tickFormatter = (_, i) => i % 12 === 0 ? data[i]?.date ?? '' : ''
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
+
+      {/* Temperature chart */}
+      <div>
+        <p style={{ margin: '0 0 10px', fontWeight: 600, color: '#374151' }}>
+          Temperature Over Time (°C)
+        </p>
+        <ResponsiveContainer width="100%" height={260}>
+          <LineChart data={data} margin={{ top: 4, right: 12, left: 0, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+            <XAxis dataKey="time" tickFormatter={tickFormatter} tick={{ fontSize: 12 }} />
+            <YAxis tick={{ fontSize: 12 }} unit="°C" />
+            <Tooltip
+              contentStyle={{ borderRadius: 8, border: '1px solid #d1fae5' }}
+              formatter={(v, name) => [`${v}°C`, name]}
+            />
+            <Legend />
+            <Line type="monotone" dataKey="Tin"    stroke="#0d9488" strokeWidth={2} dot={false} name="Inside Air" />
+            <Line type="monotone" dataKey="Tout"   stroke="#6b7280" strokeWidth={1.5} dot={false} name="Outside" strokeDasharray="4 2" />
+            <Line type="monotone" dataKey="T_mass" stroke="#6ee7b7" strokeWidth={1.5} dot={false} name="Thermal Mass" />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* Heater power chart */}
+      <div>
+        <p style={{ margin: '0 0 10px', fontWeight: 600, color: '#374151' }}>
+          Heater Power (W)
+        </p>
+        <ResponsiveContainer width="100%" height={160}>
+          <LineChart data={data} margin={{ top: 4, right: 12, left: 0, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+            <XAxis dataKey="time" tickFormatter={tickFormatter} tick={{ fontSize: 12 }} />
+            <YAxis tick={{ fontSize: 12 }} unit="W" />
+            <Tooltip
+              contentStyle={{ borderRadius: 8, border: '1px solid #d1fae5' }}
+              formatter={(v) => [`${v}W`, 'Heater']}
+            />
+            <Line type="monotone" dataKey="Q_heater" stroke="#f59e0b" strokeWidth={2} dot={false} name="Heater" />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+
     </div>
   )
 }

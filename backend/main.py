@@ -1,9 +1,21 @@
 import pandas as pd
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from datetime import datetime
 
 from weather import get_weather
 import model
+
+# from pymongo import MongoClient
+
+# client = MongoClient("mongodb://localhost:27017/")
+# db = client["greenhouse"]
+# simulated = db["simulated_runs"]
+
+from tinydb import TinyDB
+
+db = TinyDB('simulations.json')
+simulated = db.table('simulated_runs')
 
 app = FastAPI()
 
@@ -22,42 +34,53 @@ def read_root():
 
 @app.post("/run-simulation")
 def run_simulation(params: dict):
+    weather_df = get_weather(params["location"], params["start_date"], params["end_date"])
+    result_df = model.simulate_greenhouse(weather_df, params["parameters"])
+    result_df["datetime"] = result_df["datetime"].astype(str)
 
-    # temporary hardcoded params for testing
-    params = {
-        "name": "test_run",
-        "location": { "lat": 41.8781, "lon": -87.6298 },
-        "start_date": "2026-02-10",
-        "end_date": "2026-02-14",
-        "parameters": {
-            "A_glass": 50.0,
-            "tau_glass": 0.85,
-            "fraction_solar_to_air": 0.3,
-            "U_day": 2.0,
-            "U_night": 0.25,
-            "ACH": 0.5,
-            "V": 100.0,
-            "A_floor": 50.0,
-            "thermal_mass_kg": 40000.0,
-            "cp_mass": 4186.0,
-            "A_mass": 40.0,
-            "h_am": 5.0,
-            "heater_max_w": 5000.0,
-            "heating_rate_factor": 0.3,
-            "T_init": 15.0,
-            "T_mass_init": 15.0,
-            "T_soil_init": 15.0,
-            "setpoint": 10.0
-        }
+    rows = result_df.to_dict(orient="records")
+
+    # insert works almost the same as pymongo
+    simulated.insert({
+        "name": params["name"],
+        "run_at": str(datetime.now()),
+        "location": params["location"],
+        "start_date": params["start_date"],  # ← add this
+        "end_date": params["end_date"],       # ← and this
+        "parameters": params["parameters"],
+        "rows": rows
+    })
+
+    return {
+        "status": "ok",
+        "rows": rows
     }
 
-    # get wheather data
-    weather_df = get_weather(params["location"], params["start_date"], params["end_date"])
+@app.get("/history")
+def get_history():
+    runs = simulated.all()
+    sorted_runs = sorted(runs, key=lambda x: x.get("start_date", ""), reverse=True)
+    return {
+        "status": "ok",
+        "runs": [
+            {
+                "id": r.doc_id,
+                "name": r["name"],
+                "run_at": r["run_at"],
+                "location": r["location"],
+                "start_date": r["start_date"],
+                "end_date": r["end_date"],
+            }
+            for r in sorted_runs
+        ]
+    }
 
-    # simulate greenhouse with inputs
-    result_df = model.simulate_greenhouse(weather_df, params["parameters"])
-
-    return result_df.to_dict(orient="records")
+@app.get("/history/{run_id}")
+def get_run(run_id: int):
+    run = simulated.get(doc_id=run_id)
+    if not run:
+        return {"status": "error", "message": "Run not found"}
+    return {"status": "ok", "run": run}
 
 if __name__ == "__main__":
     import uvicorn
