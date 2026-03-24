@@ -1,8 +1,65 @@
 import { useState } from 'react'
 import './Simulation.css'
 
-function Simulation() {
+const TABS = [
+  { id: 'structure', label: '🏗️ Structure' },
+  { id: 'thermal',   label: '🌡️ Thermal'   },
+  { id: 'initial',   label: '🔬 Initial'   },
+]
+
+const FIELDS = {
+  structure: [
+    {
+      legend: 'Physical Dimensions',
+      fields: [
+        { label: 'Glass Area',           name: 'glassArea',           unit: 'm²',    min: 0,   max: 200,  step: 0.1  },
+        { label: 'Floor Area',           name: 'floorArea',           unit: 'm²',    min: 0,   max: 500,  step: 0.1  },
+        { label: 'Volume',               name: 'volume',              unit: 'm³',    min: 0,   max: 5000, step: 1    },
+        { label: 'Glass Transmissivity', name: 'glassTransmissivity', unit: '0–1',   min: 0,   max: 1,    step: 0.01 },
+      ],
+    },
+    {
+      legend: 'Heat Loss',
+      fields: [
+        { label: 'U-Value Day',   name: 'uValueDay',   unit: 'W/m²K', min: 0, max: 10, step: 0.01 },
+        { label: 'U-Value Night', name: 'uValueNight', unit: 'W/m²K', min: 0, max: 10, step: 0.01 },
+        { label: 'Air Changes / Hour (ACH)', name: 'ach', unit: 'ACH', min: 0, max: 10, step: 0.1  },
+      ],
+    },
+  ],
+  thermal: [
+    {
+      legend: 'Thermal Mass',
+      fields: [
+        { label: 'Mass',                   name: 'mass',             unit: 'kg',    min: 0, max: 20000, step: 1   },
+        { label: 'Surface Area',           name: 'surfaceArea',      unit: 'm²',    min: 0, max: 2000,  step: 0.1 },
+        { label: 'Heat Transfer Coeff',    name: 'heatTransferCoeff',unit: 'W/m²K', min: 0, max: 100,   step: 0.1 },
+      ],
+    },
+    {
+      legend: 'Solar & Heating',
+      fields: [
+        { label: 'Solar to Air Fraction',  name: 'solarToAirFraction', unit: '0–1', min: 0,   max: 1,     step: 0.01 },
+        { label: 'Heater Max Power',       name: 'heaterMaxPower',     unit: 'W',   min: 0,   max: 20000, step: 10   },
+        { label: 'SetPoint Temperature',   name: 'setPoint',           unit: '°C',  min: -10, max: 40,    step: 0.1  },
+      ],
+    },
+  ],
+  initial: [
+    {
+      legend: 'Initial Conditions',
+      fields: [
+        { label: 'Air Temperature',  name: 'airTemp',  unit: '°C', min: -30, max: 60, step: 0.1 },
+        { label: 'Mass Temperature', name: 'massTemp', unit: '°C', min: -30, max: 60, step: 0.1 },
+        { label: 'Soil Temperature', name: 'soilTemp', unit: '°C', min: -30, max: 60, step: 0.1 },
+      ],
+    },
+  ],
+}
+
+export default function Simulation() {
   const [activeTab, setActiveTab] = useState('structure')
+  const [loading, setLoading] = useState(false)
   const [config, setConfig] = useState({
     glassArea: 50,
     floorArea: 100,
@@ -22,14 +79,16 @@ function Simulation() {
     soilTemp: 12,
   })
 
-  const update = (key, value) => setConfig(prev => ({ ...prev, [key]: parseFloat(value) }))
+  const update = (key, value) =>
+    setConfig(prev => ({ ...prev, [key]: parseFloat(value) }))
 
   const handleSimulate = async () => {
+    setLoading(true)
     const payload = {
-      name: "run_1",
+      name: 'run_1',
       location: { lat: 41.8781, lon: -87.6298 },
-      start_date: "2026-02-10",
-      end_date: "2026-02-14",
+      start_date: '2026-02-10',
+      end_date: '2026-02-14',
       parameters: {
         A_glass: config.glassArea,
         A_floor: config.floorArea,
@@ -47,114 +106,126 @@ function Simulation() {
         T_init: config.airTemp,
         T_mass_init: config.massTemp,
         T_soil_init: config.soilTemp,
-      }
+      },
     }
-
-    const res = await fetch("http://localhost:8000/run-simulation", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    })
-
-    const data = await res.json()
-    console.log(data)
+    try {
+      const res = await fetch('http://localhost:8000/run-simulation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      const data = await res.json()
+      console.log(data)
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const Field = ({ label, name, min, max, step }) => (
-    <>
-      <label>{label}</label>
-      <div className="cfg-row">
-        <input
-          type="range"
-          min={min} max={max} step={step}
-          value={config[name]}
-          onChange={e => update(name, e.target.value)}
-          className="cfg-range"
-        />
-        <input
-          type="number"
-          min={min} max={max} step={step}
-          value={config[name]}
-          onChange={e => update(name, e.target.value)}
-          className="cfg-input-number"
-        />
-      </div>
-    </>
-  )
-
   return (
-    <div>
-      <h1>Calculation Based Simulator</h1>
-      <div className="config-section" style={{border: '1px solid #ddd', padding: 12, borderRadius: 6}}>
+    <div className="sim-page">
 
-        <div className="cfg-tabs">
-          <button className={`cfg-tab-btn ${activeTab === 'structure' ? 'active' : ''}`} onClick={() => setActiveTab('structure')}>Structure</button>
-          <button className={`cfg-tab-btn ${activeTab === 'thermal' ? 'active' : ''}`} onClick={() => setActiveTab('thermal')}>Thermal</button>
-          <button className={`cfg-tab-btn ${activeTab === 'initial' ? 'active' : ''}`} onClick={() => setActiveTab('initial')}>Initial</button>
+      {/* ── Page header ── */}
+      <div className="sim-hero">
+        <h1 className="sim-hero-title">Greenhouse Simulator</h1>
+        <p className="sim-hero-sub">Configure your structure, run the model, and explore the results.</p>
+      </div>
+
+      {/* ── Two-column workspace ── */}
+      <div className="sim-workspace">
+
+        {/* ── LEFT: Inputs ── */}
+        <div className="sim-card sim-inputs">
+          <h2 className="sim-card-heading">Parameters</h2>
+
+          {/* Tabs */}
+          <div className="sim-tabs">
+            {TABS.map(t => (
+              <button
+                key={t.id}
+                className={`sim-tab${activeTab === t.id ? ' active' : ''}`}
+                onClick={() => setActiveTab(t.id)}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Fieldsets for active tab */}
+          <div className="sim-fields">
+            {FIELDS[activeTab].map(group => (
+              <fieldset key={group.legend} className="sim-fieldset">
+                <legend className="sim-legend">{group.legend}</legend>
+                {group.fields.map(f => (
+                  <FieldRow key={f.name} field={f} value={config[f.name]} onChange={update} />
+                ))}
+              </fieldset>
+            ))}
+          </div>
+
+          {/* Simulate button */}
+          <div className="sim-actions">
+            <button
+              className={`sim-btn${loading ? ' loading' : ''}`}
+              onClick={handleSimulate}
+              disabled={loading}
+            >
+              {loading ? 'Running…' : '▶ Run Simulation'}
+            </button>
+          </div>
         </div>
 
-        {activeTab === 'structure' && (
-          <div>
-            <fieldset>
-              <legend className="cfg-section-title">Physical Dimensions</legend>
-              <div className="cfg-grid">
-                <Field label="Glass Area (m²)" name="glassArea" min={0} max={200} step={0.1} />
-                <Field label="Floor Area (m²)" name="floorArea" min={0} max={500} step={0.1} />
-                <Field label="Volume (m³)" name="volume" min={0} max={5000} step={1} />
-                <Field label="Glass Transmissivity (0-1)" name="glassTransmissivity" min={0} max={1} step={0.01} />
-              </div>
-            </fieldset>
-            <fieldset style={{marginTop:10}}>
-              <legend className="cfg-section-title">Heat Loss</legend>
-              <div className="cfg-grid">
-                <Field label="U-Value Day (W/m²K)" name="uValueDay" min={0} max={10} step={0.01} />
-                <Field label="U-Value Night (W/m²K)" name="uValueNight" min={0} max={10} step={0.01} />
-                <Field label="Air Changes / Hour (ACH)" name="ach" min={0} max={10} step={0.1} />
-              </div>
-            </fieldset>
+        {/* ── RIGHT: Output placeholder ── */}
+        <div className="sim-card sim-output">
+          <h2 className="sim-card-heading">Results</h2>
+          <div className="sim-output-placeholder">
+            <span className="sim-output-icon">📊</span>
+            <p className="sim-output-label">
+              Results will appear here after you run the simulation.
+            </p>
+            <p className="sim-output-hint">
+              Configure your parameters on the left, then click <strong>Run Simulation</strong>.
+            </p>
           </div>
-        )}
-
-        {activeTab === 'thermal' && (
-          <div>
-            <fieldset>
-              <legend className="cfg-section-title">Thermal Mass</legend>
-              <div className="cfg-grid">
-                <Field label="Mass (kg)" name="mass" min={0} max={20000} step={1} />
-                <Field label="Surface Area (m²)" name="surfaceArea" min={0} max={2000} step={0.1} />
-                <Field label="Heat Transfer Coeff (W/m²K)" name="heatTransferCoeff" min={0} max={100} step={0.1} />
-              </div>
-            </fieldset>
-            <fieldset style={{marginTop:10}}>
-              <legend className="cfg-section-title">Solar & Heating</legend>
-              <div className="cfg-grid">
-                <Field label="Solar to Air Fraction" name="solarToAirFraction" min={0} max={1} step={0.01} />
-                <Field label="Heater Max Power (W)" name="heaterMaxPower" min={0} max={20000} step={10} />
-                <Field label="SetPoint Temperature (°C)" name="setPoint" min={-10} max={40} step={0.1} />
-              </div>
-            </fieldset>
-          </div>
-        )}
-
-        {activeTab === 'initial' && (
-          <div>
-            <fieldset>
-              <legend className="cfg-section-title">Initial Conditions</legend>
-              <div className="cfg-grid">
-                <Field label="Air Temperature (°C)" name="airTemp" min={-30} max={60} step={0.1} />
-                <Field label="Mass Temperature (°C)" name="massTemp" min={-30} max={60} step={0.1} />
-                <Field label="Soil Temperature (°C)" name="soilTemp" min={-30} max={60} step={0.1} />
-              </div>
-            </fieldset>
-          </div>
-        )}
-
-        <div style={{display:'flex', justifyContent:'flex-end'}}>
-          <button className="cfg-button" type="button" onClick={handleSimulate}>Simulate</button>
         </div>
+
       </div>
     </div>
   )
 }
 
-export default Simulation
+/* ── Field row: label + slider + number input ── */
+function FieldRow({ field, value, onChange }) {
+  const { label, name, unit, min, max, step } = field
+  const pct = ((value - min) / (max - min)) * 100
+
+  return (
+    <div className="field-row">
+      <div className="field-label-row">
+        <span className="field-label">{label}</span>
+        <span className="field-unit">{unit}</span>
+      </div>
+      <div className="field-controls">
+        <div className="slider-track">
+          <div className="slider-fill" style={{ width: `${pct}%` }} />
+          <input
+            type="range"
+            min={min} max={max} step={step}
+            value={value}
+            onChange={e => onChange(name, e.target.value)}
+            className="field-slider"
+            style={{ '--pct': `${((value - min) / (max - min)) * 100}%` }}
+          />
+        </div>
+        <input
+          type="number"
+          min={min} max={max} step={step}
+          value={value}
+          onChange={e => onChange(name, e.target.value)}
+          className="field-number"
+        />
+      </div>
+    </div>
+  )
+}

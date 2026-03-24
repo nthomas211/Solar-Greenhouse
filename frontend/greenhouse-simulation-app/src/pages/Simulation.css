@@ -1,43 +1,310 @@
-.cfg-tabs { display:flex; gap:8px; align-items:center; margin-bottom:12px; }
-.cfg-tab-btn { padding:6px 12px; border:1px solid transparent; border-radius:4px; cursor:pointer; background:none; }
-.cfg-tab-btn.active { background:#f0f0f0; border-color:#ccc; }
-.cfg-grid { display:grid; grid-template-columns:1fr 120px; gap:8px 12px; align-items:center; margin-bottom:12px; }
-.cfg-section-title { font-weight:600; margin:10px 0 6px; }
-.cfg-row { display:flex; gap:8px; align-items:center; }
-.cfg-range { width:100%; }
-.cfg-button { margin-top:14px; padding:8px 14px; border-radius:6px; border:1px solid #2b6; background:#2d8; cursor:pointer; }
-.cfg-input-number { width:100%; box-sizing:border-box; padding:6px; }
-fieldset { border:1px solid #eee; padding:8px; border-radius:6px; }
-.config-section {
-    width: 80%;
-    max-width: 1200px;
-    margin: 36px auto;
-    background: #111;
-    color: #fff;
-    border: 1px solid rgba(255,255,255,0.06) !important;
-    padding: 12px;
-    border-radius: 6px !important;
-    box-shadow: 0 6px 24px rgba(0,0,0,0.6);
+/* ═══════════════════════════════════════════
+   Simulation Page — matches Landing.jsx theme
+   Primary: #0d9488  Surface: #f0fdf4
+   Accent border: #99f6e4  Subtle: #6ee7b7
+   ═══════════════════════════════════════════ */
+
+/* ── Page shell ── */
+.sim-page {
+  min-height: 100vh;
+  width: 100%;
+  background-color: #f0fdf4;
+  padding: 32px;
+  font-family: "Segoe UI", sans-serif;
+  box-sizing: border-box;
 }
 
-/* keep tab text visible on dark bg */
-.cfg-tab-btn { color: inherit; }
-.cfg-tab-btn.active { background:#222; border-color: rgba(255,255,255,0.06); color:#fff; }
-
-/* fieldsets and labels */
-fieldset { background: transparent; border: 1px solid rgba(255,255,255,0.06); }
-legend, label, .cfg-section-title { color: inherit; }
-
-/* inputs on dark bg */
-input, select, textarea, .cfg-input-number {
-    background: rgba(255,255,255,0.03);
-    color: inherit;
-    border: 1px solid rgba(255,255,255,0.08);
-    box-sizing: border-box;
+/* ── Hero banner ── */
+.sim-hero {
+  background-color: #0d9488;
+  border-radius: 16px;
+  padding: 56px 80px;
+  margin-bottom: 28px;
+  box-shadow: 0 4px 20px rgba(13, 148, 136, 0.3);
 }
 
-/* range control styling hint */
-.cfg-range { accent-color: #2d8; }
+.sim-hero-title {
+  font-size: 48px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 12px 0;
+  line-height: 1.1;
+}
 
-/* action button */
-.cfg-button { background: #2d8; color: #fff; border-color: rgba(255,255,255,0.08); }
+.sim-hero-sub {
+  color: #99f6e4;
+  font-size: 20px;
+  margin: 0;
+}
+
+/* ── Two-column workspace ── */
+.sim-workspace {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .sim-workspace {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Shared card ── */
+.sim-card {
+  background: #ffffff;
+  border: 1px solid #99f6e4;
+  border-radius: 14px;
+  padding: 36px 40px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+}
+
+.sim-card-heading {
+  font-size: 26px;
+  font-weight: 700;
+  color: #0d9488;
+  margin: 0 0 24px 0;
+}
+
+/* ── Tabs ── */
+.sim-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 0;
+}
+
+.sim-tab {
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  border-radius: 0;
+  padding: 8px 18px 12px;
+  margin-bottom: -2px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.sim-tab:hover {
+  color: #0d9488;
+  border-color: #6ee7b7;
+}
+
+.sim-tab.active {
+  color: #0d9488;
+  border-color: #0d9488;
+}
+
+/* ── Fieldsets ── */
+.sim-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sim-fieldset {
+  border: 1px solid #d1fae5;
+  border-radius: 10px;
+  padding: 20px 24px;
+  background: #f0fdf4;
+  margin: 0;
+}
+
+.sim-legend {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0d9488;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0 6px;
+}
+
+/* ── Individual field row ── */
+.field-row {
+  margin-top: 16px;
+}
+
+.field-row:first-of-type {
+  margin-top: 8px;
+}
+
+.field-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+.field-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.field-unit {
+  font-size: 12px;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.field-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.field-number {
+  width: 80px;
+  min-width: 90px;
+  padding: 8px 12px;
+  border: 1.5px solid #6ee7b7;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  background: #fff;
+  text-align: right;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+}
+
+.field-number:focus {
+  outline: none;
+  border-color: #0d9488;
+  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+}
+
+.slider-track {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.slider-fill {
+  display: none;
+}
+
+.field-slider {
+  width: 100%;
+  height: 6px;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  accent-color: #0d9488;
+  background: transparent;
+  border: none;
+  opacity: 1;
+  position: static;
+  transform: none;
+}
+
+.field-slider::-webkit-slider-runnable-track {
+  background: linear-gradient(to right, #0d9488 var(--pct), #e5e7eb var(--pct));
+  height: 6px;
+  border-radius: 999px;
+}
+
+.field-slider::-moz-range-track {
+  background: linear-gradient(to right, #0d9488 var(--pct), #e5e7eb var(--pct));
+  height: 6px;
+  border-radius: 999px;
+}
+
+.field-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #0d9488;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  cursor: pointer;
+  margin-top: -6px;
+}
+
+
+
+/* ── Simulate button ── */
+.sim-actions {
+  margin-top: 28px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.sim-btn {
+  padding: 12px 32px;
+  background: #0d9488;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+  box-shadow: 0 2px 8px rgba(13, 148, 136, 0.35);
+}
+
+.sim-btn:hover:not(:disabled) {
+  background: #0a7a70;
+  box-shadow: 0 4px 16px rgba(13, 148, 136, 0.45);
+  transform: translateY(-1px);
+}
+
+.sim-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.sim-btn.loading,
+.sim-btn:disabled {
+  background: #6ee7b7;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* ── Output placeholder ── */
+.sim-output {
+  min-height: 480px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sim-output-placeholder {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f0fdf4;
+  border: 2px dashed #6ee7b7;
+  border-radius: 10px;
+  padding: 60px 40px;
+  text-align: center;
+  gap: 12px;
+}
+
+.sim-output-icon {
+  font-size: 52px;
+  line-height: 1;
+}
+
+.sim-output-label {
+  font-size: 18px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+}
+
+.sim-output-hint {
+  font-size: 15px;
+  color: #9ca3af;
+  margin: 0;
+  line-height: 1.6;
+}
