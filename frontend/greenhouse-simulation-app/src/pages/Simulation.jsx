@@ -25,7 +25,7 @@ function Simulation() {
   const update = (key, value) => setConfig(prev => ({ ...prev, [key]: parseFloat(value) }))
 
   const handleSimulate = async () => {
-       const payload = {
+    const payload = {
       name: "run_1",
       location: { lat: 41.8781, lon: -87.6298 },
       start_date: "2026-02-10",
