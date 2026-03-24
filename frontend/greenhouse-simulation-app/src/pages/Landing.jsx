@@ -96,7 +96,7 @@ function Landing() {
         </div>
       </div>
 
-      {/* Under the Hood */}
+      {/* Instructions */}
       <div style={{
         backgroundColor: "#ffffff",
         border: "1px solid #99f6e4",
@@ -106,7 +106,7 @@ function Landing() {
         boxShadow: "0 2px 10px rgba(0,0,0,0.05)"
       }}>
         <h2 style={{ fontSize: "32px", fontWeight: "700", color: "#0d9488", marginTop: 0, marginBottom: "20px" }}>
-          ⚙️ Under the Hood
+          ⚙️ Instructions
         </h2>
         <p style={{ color: "#9ca3af", fontStyle: "italic", margin: 0, fontSize: "20px" }}>
           TODO — technical content coming soon.
