@@ -1,0 +1,4 @@
+tinydb 
+pandas 
+numpy 
+requests
