@@ -47,3 +47,5 @@ npm run dev
 ```
 
 Then open the localhost link shown in the terminal.
+
+For a more detailed description on how to run the simulation, open "HowToUse.md"
