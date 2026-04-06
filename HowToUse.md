@@ -13,6 +13,13 @@ Before running the project, make sure the following are installed on your system
 - [Python](https://www.python.org/)
 - [Node.js and npm](https://nodejs.org/)
 
+you could also download these by running these commands in the terminal: 
+
+```bash
+winget install OpenJS.NodeJS.LTS
+winget install Python.Python.3.13 
+```
+
 You may also want to verify that these are available in your terminal by typing this :
 
 ```bash
@@ -24,7 +31,7 @@ npm --version
 After installing these on your machine, first clone the repository to your local machine by opening up the terminal and running this command in your preferred directory:
 
 ```bash
-git clone git@github.com:nthomas211/Solar-Greenhouse.git
+git clone https://github.com/nthomas211/Solar-Greenhouse.git
 ```
 
 ### Backend Setup
@@ -80,7 +87,10 @@ This usually means Python is either not installed or not added to your system PA
 
 ### npm is not recognized
 
-This usually means Node.js is not installed or not added to your system PATH.
+This usually means Node.js is not installed or not added to your system PATH. or if your computer prevents running scripts on your device you could run this command:
+
+`Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`
+
 
 ### Frontend opens but does not work correctly
 
