@@ -30,16 +30,18 @@ system currently in development.
 # Quick Start
 
 
-Terminal 1 - Backend
+### Terminal 1 - Backend
 ```bash
-git clone git@github.com:nthomas211/Solar-Greenhouse.git
+git clone https://github.com/nthomas211/Solar-Greenhouse.git
 cd Solar-Greenhouse
 cd backend
 pip install -r requirements.txt
 python main.py
 ```
+ Keep this terminal open
 
-Terminal 2 - Frontend
+
+### Terminal 2 - Frontend
 ```bash
 cd Solar-Greenhouse/frontend/greenhouse-simulation-app
 npm install

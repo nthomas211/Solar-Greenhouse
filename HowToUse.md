@@ -34,7 +34,7 @@ After installing these on your machine, first clone the repository to your local
 git clone https://github.com/nthomas211/Solar-Greenhouse.git
 ```
 
-### Backend Setup
+## Backend Setup
 
 The backend must be started first so the frontend can communicate with it.
 
@@ -58,7 +58,9 @@ After that has finished, start the backend server by running:
 ```bash 
 python main.py
 ```
-### Once this command is running, leave that terminal open. The backend needs to stay active while using the project. 
+### Once this command is running, leave that terminal open. The backend needs to stay active while using the simulator.
+
+## Frontend
 
 Next, open another terminal window or a new tab in the terminal and navigate into the main Solar-Greenhouse folder again and connect to the frontend using: 
 
@@ -66,7 +68,11 @@ Next, open another terminal window or a new tab in the terminal and navigate int
 ```bash
  cd frontend/greenhouse-simulation-app
 ```
-Install frontend dependencies using the command:
+Once you are in the frontend, it should look something like this: 
+```bash
+C:\Users\<name>\<folder>\Solar-Greenhouse\frontend\greenhouse-simulation-app
+```
+Now install frontend dependencies using the command:
 ```bash
 npm install
 ```
