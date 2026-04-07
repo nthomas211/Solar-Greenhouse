@@ -16,8 +16,10 @@ Before running the project, make sure the following are installed on your system
 you could also download these by running these commands in the terminal: 
 
 ```bash
-winget install OpenJS.NodeJS.LTS
-winget install Python.Python.3.13 
+winget install --id OpenJS.NodeJS.LTS 
+winget install --id Python.Python.3.13
+winget install --id Git.Git -e --source winget
+
 ```
 
 You may also want to verify that these are available in your terminal by typing this :
