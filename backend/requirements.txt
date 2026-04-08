@@ -5,3 +5,6 @@ numpy
 requests
 pymongo
 tinydb
+torch
+scikit-learn
+joblib
