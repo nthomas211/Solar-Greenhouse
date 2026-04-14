@@ -18,7 +18,7 @@ you could also download these by running these commands in the terminal:
 ```bash
 winget install --id OpenJS.NodeJS.LTS 
 winget install --id Python.Python.3.13
-winget install --id Git.Git -e --source winget
+winget install --id Git.Git 
 
 ```
 
