@@ -24,7 +24,7 @@ from multiprocessing import Pool
 from datetime import datetime
 
 # ── Import your sim ───────────────────────────────────────────────────────────
-from model import simulate_greenhouse
+from backend.predictive_model.model import simulate_greenhouse
 
 
 # ─────────────────────────────────────────────────────────────────────────────

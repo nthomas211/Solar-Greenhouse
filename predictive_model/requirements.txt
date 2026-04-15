@@ -1,4 +1,0 @@
-tinydb 
-pandas 
-numpy 
-requests
