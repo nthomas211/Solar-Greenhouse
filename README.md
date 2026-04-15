@@ -50,4 +50,4 @@ npm run dev
 
 Then open the localhost link shown in the terminal.
 
-For a more detailed description on how to run the simulation, open "HowToUse.md"
+### For a more detailed description on how to run the simulation, open [How To Use](https://github.com/nthomas211/Solar-Greenhouse/blob/main/HowToUse.md)
