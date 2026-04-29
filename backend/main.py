@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime
 
 from weather import get_weather
-import model
+import model as model
 
 # from pymongo import MongoClient
 

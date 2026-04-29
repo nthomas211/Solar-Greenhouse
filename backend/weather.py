@@ -10,9 +10,9 @@ def get_weather(location: dict, start_date: str, end_date: str, timezone: str = 
     lat, lon = location["lat"], location["lon"]
 
     url = (
-        f"https://api.open-meteo.com/v1/forecast?"
+        f"https://archive-api.open-meteo.com/v1/archive?"
         f"latitude={lat}&longitude={lon}"
-        f"&hourly=temperature_2m,shortwave_radiation,relativehumidity_2m"
+        f"&hourly=temperature_2m,shortwave_radiation,relative_humidity_2m"
         f"&start_date={start_date}&end_date={end_date}"
         f"&timezone={timezone}"
     )
@@ -31,7 +31,7 @@ def get_weather(location: dict, start_date: str, end_date: str, timezone: str = 
             "datetime": pd.to_datetime(data["hourly"]["time"]),
             "Tout": data["hourly"]["temperature_2m"],
             "G": data["hourly"]["shortwave_radiation"],
-            "RH": np.array(data["hourly"].get("relativehumidity_2m", [50]*len(data["hourly"]["time"]))) / 100.0
+            "RH": np.array(data["hourly"].get("relative_humidity_2m", [50]*len(data["hourly"]["time"]))) / 100.0
         })
 
         logging.info(f"Retrieved {len(df)} hourly entries.")

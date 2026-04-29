@@ -1,3 +1,8 @@
+training_data.json
+weather_stats_cache.json
+*.pt
+*.pkl
+
 .idea
 *.py[cod]
 
